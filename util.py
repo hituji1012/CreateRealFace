@@ -219,7 +219,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import os
 import numpy as np
-%matplotlib inline
 
 def display_pic(folder):
     fig = plt.figure(figsize=(20, 40))
@@ -258,7 +257,3 @@ def edit_pic(file_path):
     im_b = im.crop((1028,0,3080,1028))
     up = get_concat_h(black, im_a)
     get_concat_v(up, im_b).save(file_path)
-
-
-import os
-os.makedirs('pic', exist_ok=True)
