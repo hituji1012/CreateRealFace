@@ -213,3 +213,52 @@ def align_face(filepath, output_size=1024, transform_size=4096, enable_padding=T
 
 def strip_path_extension(path):
    return  os.path.splitext(path)[0]
+
+# --- 画像表示関数 ---
+import matplotlib.pyplot as plt
+from PIL import Image
+import os
+import numpy as np
+%matplotlib inline
+
+def display_pic(folder):
+    fig = plt.figure(figsize=(20, 40))
+    files = os.listdir(folder)
+    files.sort()
+    for i, file in enumerate(files):
+        if file=='.ipynb_checkpoints':
+            continue
+        img = Image.open(folder+'/'+file)
+        images = np.asarray(img)
+        ax = fig.add_subplot(10, 5, i+1, xticks=[], yticks=[])
+        image_plt = np.array(images)
+        ax.imshow(image_plt)
+        ax.set_xlabel(file, fontsize=20)
+    plt.show()
+    plt.close()
+
+
+from PIL import Image
+def get_concat_h(im1, im2):
+    dst = Image.new('RGB', (im1.width + im2.width, im1.height))
+    dst.paste(im1, (0, 0))
+    dst.paste(im2, (im1.width, 0))
+    return dst
+
+def get_concat_v(im1, im2):
+    dst = Image.new('RGB', (im1.width, im1.height + im2.height))
+    dst.paste(im1, (0, 0))
+    dst.paste(im2, (0, im1.height))
+    return dst
+
+def edit_pic(file_path):
+    im = Image.open(file_path)
+    black = Image.open('./black.jpg')
+    im_a = im.crop((0, 0, 1028, 1028))
+    im_b = im.crop((1028,0,3080,1028))
+    up = get_concat_h(black, im_a)
+    get_concat_v(up, im_b).save(file_path)
+
+
+import os
+os.makedirs('pic', exist_ok=True)
